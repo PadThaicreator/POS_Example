@@ -5,17 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Menu extends Model
-{
+class Member extends Model
+{   
     use HasFactory;
+    //
+
+    protected $table ='user';
     public $timestamps = false;
     protected $fillable = [
-   
-        'name',
-        'description',
-        'price',
-        'image',
-        'category',
+        'firstName',
+        'lastName',
+        'nickname',
+        'phoneNumber',
+        'birthDay',
+        'role',
         'status'
     ];
 }
