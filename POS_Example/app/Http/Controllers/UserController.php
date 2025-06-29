@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Member;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -30,20 +31,22 @@ class UserController extends Controller
             'birthday' => 'required'
         ]);
         
-
+        $password = Hash::make($request->input('firstName'));
         $data = [
              'firstName' => $request->input('firstName'),
             'lastName' => $request->input('lastName'),
             'nickname' => $request->input('nickname'),
             'phoneNumber' => $request->input('phoneNumber'),
             'birthDay' => $request->input('birthday'),
-            'role' => $request->input('role')
+            'role' => $request->input('role'),
+            'password' => $password
         ];
 
         if($request->input('mode') == 'edit'){
             
             Member::find($request->input('id'))->update($data);
         }else{
+
             Member::create($data);
         }
 

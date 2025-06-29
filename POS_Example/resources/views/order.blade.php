@@ -101,7 +101,7 @@ function getInCart($item)
             }
             $totalPrice = 0;
             foreach ($cart as $item) {
-                $totalPrice += $item->price;
+                $totalPrice += $item->price*$item->quantity;
             }
 
         @endphp

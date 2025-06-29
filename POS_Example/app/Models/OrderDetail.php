@@ -16,4 +16,14 @@ class OrderDetail extends Model
         'amount'
     ];
 
+    public function menus()
+    {
+        return $this->belongsTo(Menu::class, 'menus_id');
+    }
+
+    public function orders()
+    {
+        return $this->belongsTo(Order::class, 'orders_id');
+    }
+
 }

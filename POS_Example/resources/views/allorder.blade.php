@@ -73,21 +73,14 @@
                     </div>
                     
                     <!-- Card Footer -->
-                    {{-- <div class="bg-gray-50 px-4 py-3 rounded-b-lg border-t border-gray-200">
+                    <div class="bg-gray-50 px-4 py-3 rounded-b-lg border-t border-gray-200">
                         <div class="flex justify-between items-center">
-                            <button class="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors duration-200">
+                            <a href="{{route('detailOrderPage' , $item->id)}}" class="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors duration-200">
                                 View Details
-                            </button>
-                            <div class="flex space-x-2">
-                                <a href="" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors duration-200">
-                                    Edit
-                                </a>
-                                <a class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors duration-200">
-                                    Delete
-                                </a>
-                            </div>
+                            </a>
+                            
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
             @endforeach
         </div>

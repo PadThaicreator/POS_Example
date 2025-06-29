@@ -11,7 +11,7 @@ Route::get('/', function () {
 });
 Route::post('/login', [AdminController::class, 'index'])->name('login');
 
-Route::prefix('menu')->group(function () {
+Route::prefix('menu')->middleware(['is_staff'])->group(function () {
 
     Route::get('/order', [AdminController::class , 'orderPage'])->name('orderPage');
     Route::get('/add', [AdminController::class , 'addPage'])->name('addPage');
@@ -21,6 +21,7 @@ Route::prefix('menu')->group(function () {
     Route::get('/summary', [AdminController::class , 'summaryPage'])->name('summaryPage');
     Route::get('/payment', [AdminController::class , 'paymentPage'])->name('paymentPage');
     Route::post('/createOrder', [OrderController::class , 'createOrder'])->name('createOrder');
+    Route::get('/order/{id}', [OrderController::class , 'detailOrderPage'])->name('detailOrderPage');
 });
 
 Route::post('/addMenu', [AdminController::class, 'addMenu'])->name('addMenu');
@@ -31,7 +32,7 @@ Route::post('/clear-cart', [OrderController::class, 'clearCart'])->name('clearCa
 
 
 
-Route::prefix('member')->group(function(){
+Route::prefix('member')->middleware(['is_staff'])->group(function(){
 
     Route::get('/' , [UserController::class , 'memberPage'])->name('memberPage');
     Route::get('/create' , [UserController::class , 'addMemberPage'])->name('addMember');

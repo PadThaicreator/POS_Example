@@ -8,27 +8,42 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Cloudinary\Api\Upload\UploadApi;
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
     //
-    function index()
+
+    function index(Request $req)
     {
+        $phone = $req->input('phone');
+        $pass = $req->input('password');
+        
+        session()->flush();
 
+        $user = Member::where('phoneNumber', $phone)->where('role', 'staff')->first();
+        if(!$user){
+            return redirect()->back()->withErrors(['login' => 'User Not Found'])->withInput();
+        }
 
-        return view('main');
+        if (Hash::check($pass, $user->password)) {
+            
+            session()->push('user' , $user);
+            return view('main');
+        } else {
+            return redirect()->back()->withErrors(['login' => 'Invalid Phone Number or password'])->withInput();
+        }
     }
     function orderPage()
     {
-        $menus = Menu::where('status' , 'available')->get();
+        $menus = Menu::where('status', 'available')->get();
         return view('order')->with('menus', $menus);
     }
     function summaryPage()
     {
-        
-        $user = Member::where('role' , 'customer')->get();
-        return view('summary')->with('user' , $user);
+
+        $user = Member::where('role', 'customer')->get();
+        return view('summary')->with('user', $user);
     }
 
     function addPage()
@@ -42,32 +57,33 @@ class AdminController extends Controller
         return view('edit')->with('menus', $menus);
     }
     function allOrderPage()
-    {   
+    {
 
-        $orders = Order::with(['customer', 'staff'])->get(); 
-        return view('allorder')->with('orders' , $orders);
+        $orders = Order::with(['customer', 'staff'])->get();
+        return view('allorder')->with('orders', $orders);
     }
 
-   
 
-   
 
-    function paymentPage(Request $request){
+
+
+    function paymentPage(Request $request)
+    {
         $cart = session('cart', []);
         $totalPrice = 0;
-            foreach ($cart as $item) {
-                $totalPrice += $item->price;
-            }
+        foreach ($cart as $item) {
+            $totalPrice += $item->price*$item->quantity;
+        }
 
-      
-            $id = $request->input('member-id');
-        if($id){
+
+        $id = $request->input('member-id');
+        if ($id) {
             $user = Member::find($id);
-        }else{
+        } else {
             $user = null;
         }
 
-        return view('payment' )->with('totalPrice' , $totalPrice)->with('user' , $user);
+        return view('payment')->with('totalPrice', $totalPrice)->with('user', $user);
     }
 
     function addMenu(Request $request)
@@ -75,7 +91,7 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
-            
+
 
         ]);
 
@@ -113,17 +129,17 @@ class AdminController extends Controller
                 ];
                 $menu->update($data);
             } else {
-                
+
 
                 $folder = 'menu_images/';
                 $oldUrl = $menu->image;
                 $filename = pathinfo(basename($oldUrl), PATHINFO_FILENAME);
                 $fullPublicId = $folder  . $filename;
-            
+
                 (new UploadApi())->destroy($fullPublicId);
 
                 $category = $request->input('category', 'Food');
-                
+
                 $uploadedFile = Storage::disk('cloudinary')->putFile($folder, $request->file('image'));
                 $url = 'https://res.cloudinary.com/dlsd9groz/image/upload/' . $uploadedFile;
 

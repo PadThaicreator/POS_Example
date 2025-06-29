@@ -58,16 +58,18 @@ class OrderController extends Controller
         $memberId = $request->input('member-id');
 
         $cart = session('cart', []);
+        $user = session('user');
+        
         $totalPrice = 0;
         foreach ($cart as $item) {
-            $totalPrice += $item->price;
+            $totalPrice += $item->price*$item->quantity;
         }
 
 
         $order = [
             'totalPrice' => $totalPrice,
             'customer_id' => $memberId,
-            'staff_id' => 1
+            'staff_id' => $user[0]->id
 
         ];
         $newOrder = Order::create($order);
@@ -84,5 +86,14 @@ class OrderController extends Controller
         session()->forget('cart');
 
         return redirect()->route('orderPage');
+    }
+
+
+    function detailOrderPage($id){
+        $order = Order::with(['customer', 'staff'])->find($id);
+        $orderDetail = OrderDetail::where('orders_id' , $id)->with(['menus'])->get();
+       
+
+        return view('detailOrder')->with('order' , $order)->with('orderDetail' , $orderDetail);
     }
 }
