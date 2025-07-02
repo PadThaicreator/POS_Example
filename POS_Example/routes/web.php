@@ -11,7 +11,7 @@ Route::get('/', function () {
 });
 Route::post('/login', [AdminController::class, 'index'])->name('login');
 
-Route::prefix('menu')->middleware(['is_staff'])->group(function () {
+Route::prefix('menu')->group(function () {
 
     Route::get('/order', [AdminController::class , 'orderPage'])->name('orderPage');
     Route::get('/add', [AdminController::class , 'addPage'])->name('addPage');
