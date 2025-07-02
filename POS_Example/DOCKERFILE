@@ -27,10 +27,7 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 COPY . /var/www/html
 
 # ติดตั้ง Laravel dependencies
-RUN composer install --no-dev --optimize-autoloader \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+RUN composer install --no-dev --optimize-autoloader
 
 # ตั้งสิทธิ์ให้ Apache เขียนไฟล์ได้
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
@@ -38,7 +35,7 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # ✅ DEBUG (ถ้าจำเป็น): แสดงว่าไฟล์ .htaccess มีจริง
 RUN ls -la /var/www/html/public/.htaccess || echo ".htaccess not found"
 
-
-
 # เปิดพอร์ต 80
 EXPOSE 80
+
+CMD php artisan config:cache && php artisan route:cache && php artisan view:cache && apache2-foreground
