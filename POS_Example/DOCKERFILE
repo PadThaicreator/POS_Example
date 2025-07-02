@@ -1,0 +1,37 @@
+# ใช้ PHP พร้อม Apache
+FROM php:8.2-apache
+
+# ติดตั้ง PHP Extensions ที่ Laravel ใช้
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    zip \
+    git \
+    unzip \
+    curl \
+    libzip-dev \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install pdo pdo_mysql zip
+
+# ติดตั้ง Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# ตั้ง Document Root เป็น /var/www/html/public
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
+# ตั้งค่า Apache ให้ใช้ public เป็น root
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf \
+    && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
+
+RUN a2enmod rewrite
+
+# คัดลอกไฟล์ทั้งหมด
+COPY . /var/www/html
+
+# ติดตั้ง dependency
+RUN composer install --no-dev --optimize-autoloader
+
+# ตั้ง permission
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache

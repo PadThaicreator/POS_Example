@@ -1,12 +1,23 @@
 services:
   - type: web
-    name: pos-laravel-app
-    env: php
+    name: laravel-pos-app
+    env: docker
     plan: free
-    buildCommand: "composer install --no-dev"
-    startCommand: "php artisan serve --host=0.0.0.0 --port=10000"
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: APP_ENV
         value: production
       - key: APP_KEY
         generateValue: true
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        value: sql12.freesqldatabase.com
+      - key: DB_PORT
+        value: 3306
+      - key: DB_DATABASE
+        value: sql12787798
+      - key: DB_USERNAME
+        value: sql12787798
+      - key: DB_PASSWORD
+        value: LFRjVGliBG
