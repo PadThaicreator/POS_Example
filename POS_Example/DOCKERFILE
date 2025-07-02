@@ -31,5 +31,13 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 RUN ls -la /var/www/html/public/.htaccess
 
+# ตรวจสอบว่า ServerName ถูกตั้งไว้
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# ยืนยันว่าไฟล์ .htaccess อยู่ (บางครั้ง Git ไม่ track ไฟล์ที่ขึ้นต้นด้วย .)
+RUN cp /var/www/html/public/.htaccess /var/www/html/public/.htaccess
+
+
+
 # เปิดพอร์ต 80
 EXPOSE 80
