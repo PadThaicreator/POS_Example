@@ -29,7 +29,7 @@
                     <!-- QR Code -->
                     <div class="text-center">
                         <div class="inline-block p-6 bg-white rounded-2xl shadow-lg border-4 border-gray-100">
-                            <img src="https://www.pp-qr.com/api/image/0936530776/{{$totalPrice}}" 
+                            <img src="https://www.pp-qr.com/api/image/0946530776/{{$totalPrice}}" 
                                  alt="QR Code for Payment" 
                                  class="w-56 h-56 mx-auto rounded-lg" />
                         </div>
