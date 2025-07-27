@@ -24,7 +24,9 @@
                 <a  class="bg-white p-4 rounded-lg hover:shadow-lg hover:bg-gray-200 hover:scale-105 transition-all duration-300" href="{{ route('addPage') }}">Add Menu</a>
                 <a  class="bg-white p-4 rounded-lg hover:shadow-lg hover:bg-gray-200 hover:scale-105 transition-all duration-300" href="{{ route('editPage') }}">Edit Menu</a>
                 <a  class="bg-white p-4 rounded-lg hover:shadow-lg hover:bg-gray-200 hover:scale-105 transition-all duration-300" href="{{ route('allOrderPage') }}">All Orders</a>
-                 <a  class="bg-white p-4 rounded-lg hover:shadow-lg hover:bg-gray-200 hover:scale-105 transition-all duration-300" href="{{ route('memberPage') }}">Member</a>
+                <a  class="bg-white p-4 rounded-lg hover:shadow-lg hover:bg-gray-200 hover:scale-105 transition-all duration-300" href="{{ route('memberPage') }}">Member</a>
+                <a  class="bg-white p-4 rounded-lg hover:shadow-lg hover:bg-gray-200 hover:scale-105 transition-all duration-300" href="{{ route('dashboardPage') }}">Dashboard</a>
+
             </div>
         </div>
         <div class="@yield('grid-col')   bg-gray-200 p-5 items-center justify-center">

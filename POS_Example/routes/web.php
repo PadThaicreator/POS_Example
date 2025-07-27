@@ -11,7 +11,7 @@ Route::get('/', function () {
 });
 Route::post('/login', [AdminController::class, 'index'])->name('login');
 
-Route::prefix('menu')->group(function () {
+Route::prefix('menu')->middleware(['is_staff'])->group(function () {
 
     Route::get('/order', [AdminController::class , 'orderPage'])->name('orderPage');
     Route::get('/add', [AdminController::class , 'addPage'])->name('addPage');
@@ -29,10 +29,10 @@ Route::post('/add-to-cart', [OrderController::class, 'addToCart'])->name('addToC
 Route::post('/clear-cart', [OrderController::class, 'clearCart'])->name('clearCart');
 
 
+Route::get('/dashboard', [OrderController::class , 'dashboardPage'])->name("dashboardPage");
 
 
-
-Route::prefix('member')->middleware(['is_staff'])->group(function(){
+Route::prefix('member')->middleware(['is_staff'])->group(function(): void{
 
     Route::get('/' , [UserController::class , 'memberPage'])->name('memberPage');
     Route::get('/create' , [UserController::class , 'addMemberPage'])->name('addMember');
@@ -41,6 +41,9 @@ Route::prefix('member')->middleware(['is_staff'])->group(function(){
     Route::post('/delete/{id}' , [UserController::class , 'deleteMember'])->name('deleteMember');
 
 });
+
+
+Route::post('/filter/dashboard' , [OrderController::class , 'filterDashboard'])->name('filterDashboard');
 
 
 
@@ -59,6 +62,7 @@ Route::get('/cart/remove/{index}', function (\Illuminate\Http\Request $request ,
     }
     
     response()->json(['status' => 'success']);
-    return redirect()->back();})->name('removeCart');
+    return redirect()->back();
+})->name('removeCart');
 
 
